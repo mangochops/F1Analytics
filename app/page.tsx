@@ -23,11 +23,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate initial data loading
     const timer = setTimeout(() => {
       setIsLoading(false)
     }, 2000)
-
     return () => clearTimeout(timer)
   }, [])
 
@@ -48,30 +46,33 @@ export default function Home() {
 
       <LiveTimingBanner />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <RaceSelector />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6">
           <Card className="md:col-span-2 bg-[#1F1F2B] border-[#2A2A3A]">
             <CardHeader>
-              <CardTitle className="text-white">Current Race Weekend Analysis</CardTitle>
-              <CardDescription className="text-gray-400">Latest data from the track</CardDescription>
+              <CardTitle className="text-white text-lg sm:text-xl">Current Race Weekend Analysis</CardTitle>
+              <CardDescription className="text-gray-400 text-sm">Latest data from the track</CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="qualifying" className="space-y-4">
-                <TabsList className="bg-[#2A2A3A] p-1">
+                <TabsList className="bg-[#2A2A3A] p-1 flex flex-wrap justify-start gap-2">
                   <TabsTrigger
                     value="qualifying"
-                    className="data-[state=active]:bg-[#E10600] data-[state=active]:text-white"
+                    className="text-xs sm:text-sm flex-1 min-w-[80px] data-[state=active]:bg-[#E10600] data-[state=active]:text-white"
                   >
                     Qualifying
                   </TabsTrigger>
-                  <TabsTrigger value="race" className="data-[state=active]:bg-[#E10600] data-[state=active]:text-white">
+                  <TabsTrigger
+                    value="race"
+                    className="text-xs sm:text-sm flex-1 min-w-[80px] data-[state=active]:bg-[#E10600] data-[state=active]:text-white"
+                  >
                     Race
                   </TabsTrigger>
                   <TabsTrigger
                     value="telemetry"
-                    className="data-[state=active]:bg-[#E10600] data-[state=active]:text-white"
+                    className="text-xs sm:text-sm flex-1 min-w-[80px] data-[state=active]:bg-[#E10600] data-[state=active]:text-white"
                   >
                     Telemetry
                   </TabsTrigger>
@@ -95,26 +96,28 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <Card className="bg-[#1F1F2B] border-[#2A2A3A]">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Trophy size={18} className="text-[#E10600]" />
+                <CardTitle className="text-white text-base sm:text-lg flex items-center gap-2">
+                  <Trophy size={16} className="text-[#E10600] sm:size-18" />
                   Top Performers
                 </CardTitle>
-                <CardDescription className="text-gray-400">Latest qualifying results</CardDescription>
+                <CardDescription className="text-gray-400 text-xs sm:text-sm">
+                  Latest qualifying results
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<LoadingCard height="200px" />}>
-                  <div className="space-y-4 animate-in fade-in-50 duration-500">
+                  <div className="space-y-3 sm:space-y-4 animate-in fade-in-50 duration-500">
                     {[1, 2, 3, 4, 5].map((position) => (
                       <div key={position} className="flex items-center justify-between group">
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-[#1F1F2B] border border-[#2A2A3A] flex items-center justify-center font-bold text-sm">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#1F1F2B] border border-[#2A2A3A] flex items-center justify-center font-bold text-xs sm:text-sm">
                             {position}
                           </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full overflow-hidden">
+                          <div className="flex items-center gap-1 sm:gap-2">
+                            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden">
                               <img
                                 src={`/images/drivers/${getDriverCode(position).toLowerCase()}.png`}
                                 alt={getDriverCode(position)}
@@ -126,13 +129,13 @@ export default function Home() {
                                 }}
                               />
                             </div>
-                            <div className={`w-1 h-8 ${getTeamColor(position)}`}></div>
-                            <span className="font-medium group-hover:text-[#E10600] transition-colors">
+                            <div className={`w-1 h-6 sm:h-8 ${getTeamColor(position)}`}></div>
+                            <span className="font-medium text-xs sm:text-sm group-hover:text-[#E10600] transition-colors">
                               {getDriverCode(position)}
                             </span>
                           </div>
                         </div>
-                        <span className="font-mono text-sm">{getQualifyingTime(position)}</span>
+                        <span className="font-mono text-xs sm:text-sm">{getQualifyingTime(position)}</span>
                       </div>
                     ))}
                   </div>
@@ -142,11 +145,11 @@ export default function Home() {
 
             <Card className="bg-[#1F1F2B] border-[#2A2A3A]">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2">
-                  <Clock size={18} className="text-[#E10600]" />
+                <CardTitle className="text-white text-base sm:text-lg flex items-center gap-2">
+                  <Clock size={16} className="text-[#E10600] sm:size-18" />
                   Next Race
                 </CardTitle>
-                <CardDescription className="text-gray-400">Upcoming Grand Prix</CardDescription>
+                <CardDescription className="text-gray-400 text-xs sm:text-sm">Upcoming Grand Prix</CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<LoadingCard height="200px" />}>
@@ -157,17 +160,19 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <Gauge size={24} className="text-[#E10600]" />
+        <div className="mt-6 sm:mt-8">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-2">
+            <Gauge size={20} className="text-[#E10600] sm:size-24" />
             Performance Analysis
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <Card className="bg-[#1F1F2B] border-[#2A2A3A]">
               <CardHeader>
-                <CardTitle className="text-white">Driver Comparison</CardTitle>
-                <CardDescription className="text-gray-400">Head-to-head performance metrics</CardDescription>
+                <CardTitle className="text-white text-base sm:text-lg">Driver Comparison</CardTitle>
+                <CardDescription className="text-gray-400 text-xs sm:text-sm">
+                  Head-to-head performance metrics
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<LoadingCard height="300px" />}>
@@ -178,8 +183,8 @@ export default function Home() {
 
             <Card className="bg-[#1F1F2B] border-[#2A2A3A]">
               <CardHeader>
-                <CardTitle className="text-white">Lap Time Analysis</CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardTitle className="text-white text-base sm:text-lg">Lap Time Analysis</CardTitle>
+                <CardDescription className="text-gray-400 text-xs sm:text-sm">
                   Consistency and performance over race distance
                 </CardDescription>
               </CardHeader>
@@ -189,13 +194,13 @@ export default function Home() {
                 </Suspense>
               </CardContent>
             </Card>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <Card className="bg-[#1F1F2B] border-[#2A2A3A]">
               <CardHeader>
-                <CardTitle className="text-white">Team Standings</CardTitle>
-                <CardDescription className="text-gray-400">Constructor championship points</CardDescription>
+                <CardTitle className="text-white text-base sm:text-lg">Team Standings</CardTitle>
+                <CardDescription className="text-gray-400 text-xs sm:text-sm">
+                  Constructor championship points
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<LoadingCard height="300px" />}>
@@ -206,8 +211,10 @@ export default function Home() {
 
             <Card className="bg-[#1F1F2B] border-[#2A2A3A]">
               <CardHeader>
-                <CardTitle className="text-white">Driver Standings</CardTitle>
-                <CardDescription className="text-gray-400">Driver championship points</CardDescription>
+                <CardTitle className="text-white text-base sm:text-lg">Driver Standings</CardTitle>
+                <CardDescription className="text-gray-400 text-xs sm:text-sm">
+                  Driver championship points
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<LoadingCard height="300px" />}>
@@ -218,39 +225,39 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col items-center">
-          <h2 className="text-2xl font-bold mb-6 text-white">Explore More Analysis</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
+        <div className="mt-6 sm:mt-8 flex flex-col items-center">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-white">Explore More Analysis</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl">
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white"
+              className="h-auto py-4 sm:py-6 flex flex-col items-center gap-2 sm:gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white text-xs sm:text-sm"
             >
-              <BarChart2 className="h-6 w-6" />
+              <BarChart2 className="h-5 w-5 sm:h-6 sm:w-6" />
               <span>Tire Strategies</span>
             </Button>
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white"
+              className="h-auto py-4 sm:py-6 flex flex-col items-center gap-2 sm:gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white text-xs sm:text-sm"
             >
-              <LineChart className="h-6 w-6" />
+              <LineChart className="h-5 w-5 sm:h-6 sm:w-6" />
               <span>Sector Times</span>
             </Button>
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white"
+              className="h-auto py-4 sm:py-6 flex flex-col items-center gap-2 sm:gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white text-xs sm:text-sm"
             >
-              <Activity className="h-6 w-6" />
+              <Activity className="h-5 w-5 sm:h-6 sm:w-6" />
               <span>Telemetry Deep Dive</span>
             </Button>
             <Button
               variant="outline"
-              className="h-auto py-6 flex flex-col items-center gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white"
+              className="h-auto py-4 sm:py-6 flex flex-col items-center gap-2 sm:gap-3 bg-[#1F1F2B] border-[#2A2A3A] hover:bg-[#2A2A3A] hover:text-[#E10600] text-white text-xs sm:text-sm"
             >
-              <Flag className="h-6 w-6" />
+              <Flag className="h-5 w-5 sm:h-6 sm:w-6" />
               <span>Season Tracker</span>
             </Button>
           </div>
-          <Button className="mt-8 bg-[#E10600] hover:bg-[#B30500] text-white">
+          <Button className="mt-6 sm:mt-8 bg-[#E10600] hover:bg-[#B30500] text-white text-sm sm:text-base">
             View All Analysis
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
@@ -283,17 +290,6 @@ function getDriverCode(position: number): string {
   return drivers[position] || "---"
 }
 
-function getDriverImage(position: number): string {
-  const driverImages: Record<number, string> = {
-    1: "/images/drivers/verstappen.png",
-    2: "/images/drivers/perez.png",
-    3: "/images/drivers/leclerc.png",
-    4: "/images/drivers/sainz.png",
-    5: "/images/drivers/hamilton.png",
-  }
-  return driverImages[position] || "/placeholder.svg"
-}
-
 function getQualifyingTime(position: number): string {
   const times: Record<number, string> = {
     1: "1:27.893",
@@ -304,4 +300,3 @@ function getQualifyingTime(position: number): string {
   }
   return times[position] || "---"
 }
-
