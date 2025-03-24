@@ -23,8 +23,22 @@ export function LiveTimingBanner() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const data = await fetchLiveTimingData()
-        setTimingData(data)
+        const rawData = await fetchLiveTimingData()
+        // Transform the raw data to ensure it matches LiveTiming interface
+        const transformedData: LiveTiming[] = rawData.map((item: any) => ({
+          driver: item.driver,
+          position: item.position,
+          lastLap: item.lastLap,
+          gap: item.gap,
+          sector1: item.sector1,
+          sector2: item.sector2,
+          sector3: item.sector3,
+          // Ensure status matches the union type
+          status: ["in-pit", "on-track", "out"].includes(item.status)
+            ? (item.status as "in-pit" | "on-track" | "out")
+            : "on-track", // Default to "on-track" if status is invalid
+        }))
+        setTimingData(transformedData)
         setLoading(false)
       } catch (error) {
         console.error("Error loading live timing data:", error)
@@ -37,7 +51,6 @@ export function LiveTimingBanner() {
     // Simulate live updates
     const interval = setInterval(() => {
       loadData()
-      // Randomly toggle live status for demo purposes
       setIsLive((prev) => (Math.random() > 0.3 ? true : prev))
     }, 30000) // Update every 30 seconds
 
@@ -48,7 +61,6 @@ export function LiveTimingBanner() {
     return null
   }
 
-  // No live session
   if (timingData.length === 0) {
     return null
   }
@@ -81,7 +93,7 @@ export function LiveTimingBanner() {
                           onError={(e) => {
                             const imgElement = e.target as HTMLImageElement
                             imgElement.src = "/placeholder.svg?height=28&width=28"
-                            imgElement.onerror = null // Prevent infinite error loop
+                            imgElement.onerror = null
                           }}
                         />
                       </div>
