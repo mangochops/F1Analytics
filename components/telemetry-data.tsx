@@ -9,8 +9,9 @@ export function TelemetryData() {
   const brakeCanvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    if (!speedCanvasRef.current) return
-    const speedCtx = speedCanvasRef.current.getContext("2d")
+    const speedCanvas = speedCanvasRef.current
+    if (!speedCanvas) return
+    const speedCtx = speedCanvas.getContext("2d")
     if (!speedCtx) return
 
     // Mock speed telemetry data
@@ -31,13 +32,13 @@ export function TelemetryData() {
     ]
 
     // Draw speed chart
-    speedCtx.clearRect(0, 0, speedCanvasRef.current.width, speedCanvasRef.current.height)
+    speedCtx.clearRect(0, 0, speedCanvas.width, speedCanvas.height)
 
     // Draw axes
     speedCtx.beginPath()
     speedCtx.moveTo(40, 20)
-    speedCtx.lineTo(40, speedCanvasRef.current.height - 30)
-    speedCtx.lineTo(speedCanvasRef.current.width - 20, speedCanvasRef.current.height - 30)
+    speedCtx.lineTo(40, speedCanvas.height - 30)
+    speedCtx.lineTo(speedCanvas.width - 20, speedCanvas.height - 30)
     speedCtx.strokeStyle = "#ccc"
     speedCtx.stroke()
 
@@ -45,29 +46,29 @@ export function TelemetryData() {
     speedCtx.font = "14px Arial"
     speedCtx.fillStyle = "#333"
     speedCtx.textAlign = "center"
-    speedCtx.fillText("Speed Telemetry", speedCanvasRef.current.width / 2, 15)
+    speedCtx.fillText("Speed Telemetry", speedCanvas.width / 2, 15)
 
     // Draw axes labels
     speedCtx.font = "10px Arial"
     speedCtx.fillStyle = "#666"
     speedCtx.textAlign = "center"
-    speedCtx.fillText("Distance (m)", speedCanvasRef.current.width / 2, speedCanvasRef.current.height - 10)
+    speedCtx.fillText("Distance (m)", speedCanvas.width / 2, speedCanvas.height - 10)
 
     speedCtx.save()
-    speedCtx.translate(15, speedCanvasRef.current.height / 2)
+    speedCtx.translate(15, speedCanvas.height / 2)
     speedCtx.rotate(-Math.PI / 2)
     speedCtx.textAlign = "center"
     speedCtx.fillText("Speed (km/h)", 0, 0)
     speedCtx.restore()
 
     // Draw speed line
-    const xStep = (speedCanvasRef.current.width - 60) / speedData.length
-    const yScale = (speedCanvasRef.current.height - 50) / 350 // Max speed around 350 km/h
+    const xStep = (speedCanvas.width - 60) / speedData.length
+    const yScale = (speedCanvas.height - 50) / 350 // Max speed around 350 km/h
 
     speedCtx.beginPath()
     speedData.forEach((d, i) => {
       const x = 40 + i * xStep + xStep / 2
-      const y = speedCanvasRef.current.height - 30 - d.speed * yScale
+      const y = speedCanvas.height - 30 - d.speed * yScale
 
       if (i === 0) {
         speedCtx.moveTo(x, y)
@@ -81,11 +82,12 @@ export function TelemetryData() {
   }, [])
 
   useEffect(() => {
-    if (!throttleCanvasRef.current || !brakeCanvasRef.current) return
+    const throttleCanvas = throttleCanvasRef.current
+    const brakeCanvas = brakeCanvasRef.current
+    if (!throttleCanvas || !brakeCanvas) return
 
-    const throttleCtx = throttleCanvasRef.current.getContext("2d")
-    const brakeCtx = brakeCanvasRef.current.getContext("2d")
-
+    const throttleCtx = throttleCanvas.getContext("2d")
+    const brakeCtx = brakeCanvas.getContext("2d")
     if (!throttleCtx || !brakeCtx) return
 
     // Mock throttle data
@@ -123,13 +125,13 @@ export function TelemetryData() {
     ]
 
     // Draw throttle chart
-    throttleCtx.clearRect(0, 0, throttleCanvasRef.current.width, throttleCanvasRef.current.height)
+    throttleCtx.clearRect(0, 0, throttleCanvas.width, throttleCanvas.height)
 
     // Draw axes
     throttleCtx.beginPath()
     throttleCtx.moveTo(40, 20)
-    throttleCtx.lineTo(40, throttleCanvasRef.current.height - 30)
-    throttleCtx.lineTo(throttleCanvasRef.current.width - 20, throttleCanvasRef.current.height - 30)
+    throttleCtx.lineTo(40, throttleCanvas.height - 30)
+    throttleCtx.lineTo(throttleCanvas.width - 20, throttleCanvas.height - 30)
     throttleCtx.strokeStyle = "#ccc"
     throttleCtx.stroke()
 
@@ -137,30 +139,30 @@ export function TelemetryData() {
     throttleCtx.font = "14px Arial"
     throttleCtx.fillStyle = "#333"
     throttleCtx.textAlign = "center"
-    throttleCtx.fillText("Throttle Application", throttleCanvasRef.current.width / 2, 15)
+    throttleCtx.fillText("Throttle Application", throttleCanvas.width / 2, 15)
 
     // Draw throttle bars
-    const xStep = (throttleCanvasRef.current.width - 60) / throttleData.length
-    const yScale = (throttleCanvasRef.current.height - 50) / 100 // 0-100%
+    const xStep = (throttleCanvas.width - 60) / throttleData.length
+    const yScale = (throttleCanvas.height - 50) / 100 // 0-100%
 
     throttleData.forEach((d, i) => {
       const x = 40 + i * xStep
       const barWidth = xStep - 2
       const barHeight = d.value * yScale
-      const y = throttleCanvasRef.current.height - 30 - barHeight
+      const y = throttleCanvas.height - 30 - barHeight
 
       throttleCtx.fillStyle = "#10b981"
       throttleCtx.fillRect(x, y, barWidth, barHeight)
     })
 
     // Draw brake chart
-    brakeCtx.clearRect(0, 0, brakeCanvasRef.current.width, brakeCanvasRef.current.height)
+    brakeCtx.clearRect(0, 0, brakeCanvas.width, brakeCanvas.height)
 
     // Draw axes
     brakeCtx.beginPath()
     brakeCtx.moveTo(40, 20)
-    brakeCtx.lineTo(40, brakeCanvasRef.current.height - 30)
-    brakeCtx.lineTo(brakeCanvasRef.current.width - 20, brakeCanvasRef.current.height - 30)
+    brakeCtx.lineTo(40, brakeCanvas.height - 30)
+    brakeCtx.lineTo(brakeCanvas.width - 20, brakeCanvas.height - 30)
     brakeCtx.strokeStyle = "#ccc"
     brakeCtx.stroke()
 
@@ -168,14 +170,14 @@ export function TelemetryData() {
     brakeCtx.font = "14px Arial"
     brakeCtx.fillStyle = "#333"
     brakeCtx.textAlign = "center"
-    brakeCtx.fillText("Brake Application", brakeCanvasRef.current.width / 2, 15)
+    brakeCtx.fillText("Brake Application", brakeCanvas.width / 2, 15)
 
     // Draw brake bars
     brakeData.forEach((d, i) => {
       const x = 40 + i * xStep
       const barWidth = xStep - 2
       const barHeight = d.value * yScale
-      const y = brakeCanvasRef.current.height - 30 - barHeight
+      const y = brakeCanvas.height - 30 - barHeight
 
       brakeCtx.fillStyle = "#ef4444"
       brakeCtx.fillRect(x, y, barWidth, barHeight)
