@@ -42,20 +42,21 @@ export function LapTimeAnalysis() {
   }, [])
 
   useEffect(() => {
-    if (!canvasRef.current || loading || !lapTimeData[driver]) return
+    const canvas = canvasRef.current
+    if (!canvas || loading || !lapTimeData[driver]) return
 
-    const ctx = canvasRef.current.getContext("2d")
+    const ctx = canvas.getContext("2d")
     if (!ctx) return
 
     const data = lapTimeData[driver].lapTimes
 
     // Clear canvas
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Set up chart dimensions
     const padding = { top: 20, right: 30, bottom: 40, left: 50 }
-    const chartWidth = canvasRef.current.width - padding.left - padding.right
-    const chartHeight = canvasRef.current.height - padding.top - padding.bottom
+    const chartWidth = canvas.width - padding.left - padding.right
+    const chartHeight = canvas.height - padding.top - padding.bottom
 
     // Find min and max values for scaling
     const minTime = Math.min(...data.map((d) => d.time)) - 0.5
@@ -65,8 +66,8 @@ export function LapTimeAnalysis() {
     // Draw axes
     ctx.beginPath()
     ctx.moveTo(padding.left, padding.top)
-    ctx.lineTo(padding.left, canvasRef.current.height - padding.bottom)
-    ctx.lineTo(canvasRef.current.width - padding.right, canvasRef.current.height - padding.bottom)
+    ctx.lineTo(padding.left, canvas.height - padding.bottom)
+    ctx.lineTo(canvas.width - padding.right, canvas.height - padding.bottom)
     ctx.strokeStyle = "#3D3D4D"
     ctx.stroke()
 
@@ -82,7 +83,7 @@ export function LapTimeAnalysis() {
 
       ctx.beginPath()
       ctx.moveTo(padding.left, y)
-      ctx.lineTo(canvasRef.current.width - padding.right, y)
+      ctx.lineTo(canvas.width - padding.right, y)
       ctx.strokeStyle = "#2A2A3A"
       ctx.stroke()
 
@@ -95,11 +96,10 @@ export function LapTimeAnalysis() {
 
     data.forEach((d, i) => {
       if (i % 2 === 0) {
-        // Show every other lap number to avoid crowding
         const x = padding.left + i * xStep
         ctx.font = "10px Arial"
         ctx.fillStyle = "#999"
-        ctx.fillText(d.lap.toString(), x, canvasRef.current.height - padding.bottom + 15)
+        ctx.fillText(d.lap.toString(), x, canvas.height - padding.bottom + 15)
       }
     })
 
@@ -107,7 +107,7 @@ export function LapTimeAnalysis() {
     ctx.font = "14px Arial"
     ctx.fillStyle = "#fff"
     ctx.textAlign = "center"
-    ctx.fillText(`${driver} Lap Time Progression`, canvasRef.current.width / 2, padding.top - 5)
+    ctx.fillText(`${driver} Lap Time Progression`, canvas.width / 2, padding.top - 5)
 
     // Draw tire compound indicators
     let currentCompound = ""
@@ -124,15 +124,13 @@ export function LapTimeAnalysis() {
     data.forEach((d, i) => {
       if (d.compound !== currentCompound) {
         if (currentCompound !== "") {
-          // Draw the previous compound section
           const startX = padding.left + compoundStartLap * xStep
           const endX = padding.left + i * xStep
           const width = endX - startX
 
-          ctx.fillStyle = `${tireColors[currentCompound]}22` // Add transparency
+          ctx.fillStyle = `${tireColors[currentCompound]}22`
           ctx.fillRect(startX, padding.top, width, chartHeight)
 
-          // Add compound label
           ctx.font = "10px Arial"
           ctx.fillStyle = tireColors[currentCompound]
           ctx.textAlign = "center"
@@ -150,10 +148,9 @@ export function LapTimeAnalysis() {
       const endX = padding.left + (data.length - 1) * xStep
       const width = endX - startX
 
-      ctx.fillStyle = `${tireColors[currentCompound]}22` // Add transparency
+      ctx.fillStyle = `${tireColors[currentCompound]}22`
       ctx.fillRect(startX, padding.top, width, chartHeight)
 
-      // Add compound label
       ctx.font = "10px Arial"
       ctx.fillStyle = tireColors[currentCompound]
       ctx.textAlign = "center"
@@ -164,7 +161,7 @@ export function LapTimeAnalysis() {
     ctx.beginPath()
     data.forEach((d, i) => {
       const x = padding.left + i * xStep
-      const y = canvasRef.current.height - padding.bottom - (d.time - minTime) * (chartHeight / timeRange)
+      const y = canvas.height - padding.bottom - (d.time - minTime) * (chartHeight / timeRange)
 
       if (i === 0) {
         ctx.moveTo(x, y)
@@ -179,7 +176,7 @@ export function LapTimeAnalysis() {
     // Draw data points
     data.forEach((d, i) => {
       const x = padding.left + i * xStep
-      const y = canvasRef.current.height - padding.bottom - (d.time - minTime) * (chartHeight / timeRange)
+      const y = canvas.height - padding.bottom - (d.time - minTime) * (chartHeight / timeRange)
 
       ctx.beginPath()
       ctx.arc(x, y, 4, 0, Math.PI * 2)
