@@ -46,9 +46,10 @@ export function TelemetryChart() {
   }, [])
 
   useEffect(() => {
-    if (!canvasRef.current || loading || Object.keys(telemetryData).length === 0) return
+    const canvas = canvasRef.current
+    if (!canvas || loading || Object.keys(telemetryData).length === 0) return
 
-    const ctx = canvasRef.current.getContext("2d")
+    const ctx = canvas.getContext("2d")
     if (!ctx) return
 
     const driver1Data = telemetryData[driver1]?.data || []
@@ -57,12 +58,12 @@ export function TelemetryChart() {
     if (driver1Data.length === 0 || driver2Data.length === 0) return
 
     // Clear canvas
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     // Set up chart dimensions
     const padding = { top: 20, right: 30, bottom: 40, left: 50 }
-    const chartWidth = canvasRef.current.width - padding.left - padding.right
-    const chartHeight = canvasRef.current.height - padding.top - padding.bottom
+    const chartWidth = canvas.width - padding.left - padding.right
+    const chartHeight = canvas.height - padding.top - padding.bottom
 
     // Find min and max values for scaling based on telemetry type
     let minValue = Number.MAX_VALUE
@@ -108,8 +109,8 @@ export function TelemetryChart() {
     // Draw axes
     ctx.beginPath()
     ctx.moveTo(padding.left, padding.top)
-    ctx.lineTo(padding.left, canvasRef.current.height - padding.bottom)
-    ctx.lineTo(canvasRef.current.width - padding.right, canvasRef.current.height - padding.bottom)
+    ctx.lineTo(padding.left, canvas.height - padding.bottom)
+    ctx.lineTo(canvas.width - padding.right, canvas.height - padding.bottom)
     ctx.strokeStyle = "#3D3D4D"
     ctx.stroke()
 
@@ -125,7 +126,7 @@ export function TelemetryChart() {
 
       ctx.beginPath()
       ctx.moveTo(padding.left, y)
-      ctx.lineTo(canvasRef.current.width - padding.right, y)
+      ctx.lineTo(canvas.width - padding.right, y)
       ctx.strokeStyle = "#2A2A3A"
       ctx.stroke()
 
@@ -150,12 +151,12 @@ export function TelemetryChart() {
       const x = padding.left + (dist / maxDistance) * chartWidth
 
       ctx.beginPath()
-      ctx.moveTo(x, canvasRef.current.height - padding.bottom)
-      ctx.lineTo(x, canvasRef.current.height - padding.bottom + 5)
+      ctx.moveTo(x, canvas.height - padding.bottom)
+      ctx.lineTo(x, canvas.height - padding.bottom + 5)
       ctx.strokeStyle = "#3D3D4D"
       ctx.stroke()
 
-      ctx.fillText(`${dist}m`, x, canvasRef.current.height - padding.bottom + 20)
+      ctx.fillText(`${dist}m`, x, canvas.height - padding.bottom + 20)
     }
 
     // Draw title
@@ -170,7 +171,7 @@ export function TelemetryChart() {
       gear: "Gear Changes",
     }
 
-    ctx.fillText(titleMap[telemetryType], canvasRef.current.width / 2, padding.top - 5)
+    ctx.fillText(titleMap[telemetryType], canvas.width / 2, padding.top - 5)
 
     // Draw lines for each driver
     const drawDriverData = (data: TelemetryPoint[], color: string) => {
@@ -180,7 +181,7 @@ export function TelemetryChart() {
 
         let prevX = padding.left
         let prevY =
-          canvasRef.current.height - padding.bottom - ((data[0].gear - minValue) / (maxValue - minValue)) * chartHeight
+          canvas.height - padding.bottom - ((data[0].gear - minValue) / (maxValue - minValue)) * chartHeight
 
         ctx.moveTo(prevX, prevY)
 
@@ -189,7 +190,7 @@ export function TelemetryChart() {
 
           const x = padding.left + (point.distance / maxDistance) * chartWidth
           const y =
-            canvasRef.current.height - padding.bottom - ((point.gear - minValue) / (maxValue - minValue)) * chartHeight
+            canvas.height - padding.bottom - ((point.gear - minValue) / (maxValue - minValue)) * chartHeight
 
           // Draw horizontal line to current x
           ctx.lineTo(x, prevY)
@@ -211,7 +212,7 @@ export function TelemetryChart() {
           const x = padding.left + (point.distance / maxDistance) * chartWidth
           const value = getValue(point)
           const y =
-            canvasRef.current.height - padding.bottom - ((value - minValue) / (maxValue - minValue)) * chartHeight
+            canvas.height - padding.bottom - ((value - minValue) / (maxValue - minValue)) * chartHeight
 
           if (i === 0) {
             ctx.moveTo(x, y)
@@ -269,7 +270,7 @@ export function TelemetryChart() {
     drawDriverData(driver2Data, telemetryData[driver2].teamColor)
 
     // Draw legend
-    const legendX = canvasRef.current.width - padding.right - 100
+    const legendX = canvas.width - padding.right - 100
     const legendY = padding.top + 20
 
     // Driver 1
