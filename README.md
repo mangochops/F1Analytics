@@ -35,14 +35,14 @@ Fastf1 Project is a comprehensive toolkit built on top of the fastf1 Python pack
 ### Install from PyPI
 
 ```shellscript
-pip install fastf1-project
+pip install fastf1
 ```
 
 ### Install from Source
 
 ```shellscript
-git clone https://github.com/yourusername/fastf1-project.git
-cd fastf1-project
+git clone https://github.com/mangochops/F1Analytics.git
+cd F1Analytics
 pip install -e .
 ```
 
